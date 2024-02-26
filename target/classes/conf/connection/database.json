@@ -1,0 +1,17 @@
+{
+    "defaultConnection" : "DefaultConnection",
+    "listConnection": {
+        "DefaultConnection": {
+            "datasource":"jdbc:postgresql://localhost:5432/district",
+            "username":"postgres",
+            "password":"mdpProm15",
+            "databaseType":"POSTGRESQL"
+        },
+        "OtherConnection": {
+            "datasource":"jdbc:postgresql://localhost:5432/postgres",
+            "username":"postgres",
+            "password":"mdpProm15",
+            "databaseType":"POSTGRESQL"
+        }
+    }
+}
