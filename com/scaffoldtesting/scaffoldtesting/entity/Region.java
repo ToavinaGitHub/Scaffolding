@@ -1,4 +1,4 @@
-package com.district.test.entity;
+package com.scaffoldtesting.scaffoldtesting.entity;
 
 
 import jakarta.persistence.*;
@@ -13,8 +13,8 @@ public class Region {
 	String nomRegion;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id_region")
-	Integer idRegion;
+	@Column(name = "id")
+	Integer id;
 
 
 
@@ -27,11 +27,11 @@ public class Region {
 	public void setNomRegion(String nomRegion){
 		this.nomRegion = nomRegion;
 	}
-	public Integer getIdRegion(){
-		return this.idRegion;
+	public Integer getId(){
+		return this.id;
 	}
-	public void setIdRegion(Integer idRegion){
-		this.idRegion = idRegion;
+	public void setId(Integer id){
+		this.id = id;
 	}
 
 

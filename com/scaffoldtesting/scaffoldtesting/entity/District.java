@@ -1,4 +1,4 @@
-package com.district.test.entity;
+package com.scaffoldtesting.scaffoldtesting.entity;
 
 
 import jakarta.persistence.*;

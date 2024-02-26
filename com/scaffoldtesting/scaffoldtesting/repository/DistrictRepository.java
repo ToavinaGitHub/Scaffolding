@@ -1,7 +1,7 @@
-package com.district.test.repository;
+package com.scaffoldtesting.scaffoldtesting.repository;
 
 
-import com.district.test.entity.District;
+import com.scaffoldtesting.scaffoldtesting.entity.District;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 

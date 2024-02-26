@@ -34,7 +34,8 @@ public class View {
                     option = Misc.tabulate(Misc.tabulate(option));
                     res += this.getViewProperties().getSelect()
                     .replace("#name#", ObjectUtility.formatToCamelCase(temp))
-                    .replace("#option#", option);
+                    .replace("#option#", option)
+                    .replace("#listFK#", ObjectUtility.formatToCamelCase(temp));
                     continue;
                 }
                 res += template
@@ -59,6 +60,7 @@ public class View {
                 .replace("#label#", ObjectUtility.formatToCamelCase(set.getValue()))
                 .replace("#id#", ObjectUtility.formatToCamelCase(id))                
                 .replace("#attribute#", ObjectUtility.formatToCamelCase(attribute))
+                .replace("#listFK#",  ObjectUtility.formatToCamelCase(set.getValue()));
                 ;
             res += "\n";
         }
@@ -148,6 +150,7 @@ public class View {
             if(temp != null){
                 res += this.getViewProperties().getValues()
                 .replace("#entity#", ObjectUtility.formatToCamelCase(temp))
+                .replace("listFK", ObjectUtility.formatToCamelCase(temp)) //----------------------------------------
                 .replace("#Entity#", ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(temp))) + "\n";
                 continue;
             }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { IonButton, IonModal } from '@ionic/react';
+import { IonButton, IonModal,IonPage } from '@ionic/react';
 
-function  Region() {
+const  Region: React.FC = () => {
   const url = 'http://localhost:8080/';
 
   const [loading, setLoading] = useState(true);
@@ -17,10 +17,10 @@ function  Region() {
   const handleShow2 = () => setShow2(true);
 
   const [error, setError] = useState(null);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] =  useState<any>(null);
   const handleSelectItem = (itemKey : any) => {
     handleShow2();
-    const itemDetails = region.find((item: { idRegion: any; }) => item.idRegion === itemKey);
+    const itemDetails = region.find((item: { id: any; }) => item.id === itemKey);
     setSelectedItem(itemDetails);
   };
 
@@ -33,11 +33,11 @@ function  Region() {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    const data = {};
+    const data :any = {};
 
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id: value };
+        data[key] = { id : value };
       } else {
         data[key] = value;
       }
@@ -59,7 +59,7 @@ function  Region() {
       handleClose();
       // If you want to reload the page after success
       window.location.reload();
-    } catch (error) {
+    } catch (error : any) {
       console.log('Error:', error);
     }
   };
@@ -69,10 +69,10 @@ function  Region() {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    const data = {};
+    const data :any = {};
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id: value };
+        data[key] = { id : value };
       } else {
         data[key] = value;
       }
@@ -122,8 +122,8 @@ function  Region() {
 		setSelectedItem({ ...selectedItem, nomRegion: event.target.value });
 	};
 	
-	const handleInputIdRegionChange = (event :any) => {
-		setSelectedItem({ ...selectedItem, idRegion: event.target.value });
+	const handleInputIdChange = (event :any) => {
+		setSelectedItem({ ...selectedItem, id: event.target.value });
 	};
 	
 	
@@ -137,7 +137,7 @@ function  Region() {
 					};
 				const data = await response.json();
 				setRegion(data);
-			} catch (error) {
+			} catch (error :any) {
 				setError(error);
 			} finally {
 				setLoading(false);
@@ -147,7 +147,7 @@ function  Region() {
 	}, []);
 	
   return (
-    <>
+    <IonPage>
       <div className="container">
         <div className="row justify-content-end">
           <div className="col">
@@ -176,7 +176,7 @@ function  Region() {
             <thead id="table-head">
               <tr>
                 			<th> Nom Region </th>
-			<th> Id Region </th>
+			<th> Id </th>
 
                 <th></th>
                 <th></th>
@@ -184,9 +184,9 @@ function  Region() {
             </thead>
             <tbody id="table-body">
               {region.map((item :any) => (
-                <tr key={item.idRegion}>
+                <tr key={item.id}>
                   		<td>{item.nomRegion}</td>
-		<td>{item.idRegion}</td>
+		<td>{item.id}</td>
 
                   <td>
                     <IonButton onClick={() => handleDeleteClick(item)}>
@@ -194,7 +194,7 @@ function  Region() {
                     </IonButton>
                   </td>
                   <td>
-                    <IonButton onClick={() => handleSelectItem(item.idRegion)}>
+                    <IonButton onClick={() => handleSelectItem(item.id)}>
                       Update
                     </IonButton>
                   </td>
@@ -210,7 +210,7 @@ function  Region() {
 	</div>
 	<div className="mb-3"> 
 	 	<label className="form-label"></label> 
-	 	<input className="form-control" type="hidden" name="idRegion" onChange={handleInputIdRegionChange} value={selectedItem ? selectedItem.idRegion:''} />
+	 	<input className="form-control" type="hidden" name="id" onChange={handleInputIdChange} value={selectedItem ? selectedItem.id:''} />
 	</div>
 	
               <IonButton type="submit">
@@ -220,7 +220,7 @@ function  Region() {
           </IonModal>
         </div>
       </div>
-    </>
+    </IonPage>
   )
 }
 
