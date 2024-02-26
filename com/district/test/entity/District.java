@@ -20,6 +20,8 @@ public class District {
 	Integer idDistrict;
 
 
+
+
 	public District(){}
 
 	public String getNomDistrict(){

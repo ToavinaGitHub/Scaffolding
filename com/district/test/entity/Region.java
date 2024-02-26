@@ -17,6 +17,8 @@ public class Region {
 	Integer idRegion;
 
 
+
+
 	public Region(){}
 
 	public String getNomRegion(){
