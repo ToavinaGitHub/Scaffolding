@@ -24,7 +24,7 @@ public class Test {
         String controller = "controller";
         String repository = "repository";
         String view = "view";
-        String viewType = "react";
+        String viewType = "react-ionic";
         String url = "http://localhost:8080/";
         try{
             // String[] tables = {"district","region"};

@@ -125,7 +125,7 @@ function #entity#(){
     <>
       <div className="container">
           <div className="row justify-content-end">
-              <div className="col" >   
+              <div className="col" >   gi
                 <div className="row">
                   <Button variant="primary" onClick={handleShow}>
                       Add #entity#
