@@ -1,8 +1,8 @@
-package com.district.test.controller;
+package com.scaffoldtesting.scaffoldtesting.controller;
 
 
-import com.district.test.repository.DistrictRepository;
-import com.district.test.entity.District;
+import com.scaffoldtesting.scaffoldtesting.repository.DistrictRepository;
+import com.scaffoldtesting.scaffoldtesting.entity.District;
 import org.springframework.http.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class DistrictController {
 	}
 	@DeleteMapping()
 	public ResponseEntity<District> delete(@RequestBody District district){
-	 	repository.delete(district);
+	 	repository.delete(district); return ResponseEntity.ok().build();
 	}
 	@GetMapping()
 	public ResponseEntity<Iterable<District>> findAll(){

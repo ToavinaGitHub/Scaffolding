@@ -35,7 +35,7 @@ const  #entity#: React.FC = () => {
 
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id : value };
+        data[key] = { id: value };
       } else {
         data[key] = value;
       }
@@ -70,7 +70,7 @@ const  #entity#: React.FC = () => {
     const data :any = {};
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id : value };
+        data[key] = { #idFk# : value };
       } else {
         data[key] = value;
       }

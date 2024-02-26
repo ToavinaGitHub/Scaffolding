@@ -19,7 +19,7 @@ public class Test {
         CodeGenerator codeGenerator = new CodeGenerator();
         String path = "./";
         String framework = "java:spring-boot";
-        String packageName = "com.district.test";
+        String packageName = "com.scaffoldtesting.scaffoldtesting";
         String entity = "entity";
         String controller = "controller";
         String repository = "repository";

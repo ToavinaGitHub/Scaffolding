@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { IonButton, IonModal } from '@ionic/react';
+import { IonButton, IonModal,IonPage } from '@ionic/react';
 
-function  District() {
+const  District: React.FC = () => {
   const url = 'http://localhost:8080/';
 
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ function  District() {
   const handleShow2 = () => setShow2(true);
 
   const [error, setError] = useState(null);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] =  useState<any>(null);
   const handleSelectItem = (itemKey : any) => {
     handleShow2();
     const itemDetails = district.find((item: { idDistrict: any; }) => item.idDistrict === itemKey);
@@ -35,11 +35,11 @@ function  District() {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    const data = {};
+    const data :any = {};
 
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id: value };
+        data[key] = { id : value };
       } else {
         data[key] = value;
       }
@@ -61,7 +61,7 @@ function  District() {
       handleClose();
       // If you want to reload the page after success
       window.location.reload();
-    } catch (error) {
+    } catch (error : any) {
       console.log('Error:', error);
     }
   };
@@ -71,10 +71,10 @@ function  District() {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
-    const data = {};
+    const data :any = {};
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id: value };
+        data[key] = { id : value };
       } else {
         data[key] = value;
       }
@@ -143,7 +143,7 @@ function  District() {
 					};
 				const data = await response.json();
 				setDistrict(data);
-			} catch (error) {
+			} catch (error :any) {
 				setError(error);
 			} finally {
 				setLoading(false);
@@ -160,7 +160,7 @@ function  District() {
 					};
 				const data = await response.json();
 				setRegion(data);
-			} catch (error) {
+			} catch (error :any) {
 				setError(error);
 			} finally {
 				setLoading(false);
@@ -170,7 +170,7 @@ function  District() {
 	}, []);
 	
   return (
-    <>
+    <IonPage>
       <div className="container">
         <div className="row justify-content-end">
           <div className="col">
@@ -189,8 +189,8 @@ function  District() {
 	<div className="mb-3"> 
 	 	<label className="form-label">idDistrict</label> 
 	 	<select className="form-control" name="region" id="select-region">
-			{region.map((elt) => (
-				<option value={elt.idRegion}>{elt.nomRegion}</option>
+			{region.map((elt :any) => (
+				<option value={elt.id}>{elt.nomRegion}</option>
 			))}
 			
 		</select>
@@ -245,7 +245,7 @@ function  District() {
 	 	<label className="form-label">idDistrict</label> 
 	 	<select className="form-control" name="region">
 			{region.map((elt : any) => (
-		<option value={elt.idRegion}>{elt.nomRegion}</option>
+		<option value={elt.id}>{elt.nomRegion}</option>
 	))}
 	
 	
@@ -262,7 +262,7 @@ function  District() {
           </IonModal>
         </div>
       </div>
-    </>
+    </IonPage>
   )
 }
 
