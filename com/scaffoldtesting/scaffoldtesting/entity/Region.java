@@ -15,6 +15,9 @@ public class Region {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	Integer id;
+	@JoinColumn(name = "id_pays")
+	@ManyToOne
+	Pays pays;
 
 
 
@@ -32,6 +35,12 @@ public class Region {
 	}
 	public void setId(Integer id){
 		this.id = id;
+	}
+	public Pays getPays(){
+		return this.pays;
+	}
+	public void setPays(Pays pays){
+		this.pays = pays;
 	}
 
 

@@ -1,0 +1,4 @@
+
+-- Nom d'attribut id en "id" si cette table sera utilisé en foreign key dans une autre table
+
+-- Apres colonne id , la colonne du libellé qui sera afficher dans le select qui sera en String
