@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IonButton, IonModal,IonPage } from '@ionic/react';
 
-const  Region: React.FC = () => {
+const  Pays: React.FC = () => {
   const url = 'http://localhost:8080/';
 
   const [loading, setLoading] = useState(true);
@@ -20,13 +20,11 @@ const  Region: React.FC = () => {
   const [selectedItem, setSelectedItem] =  useState<any>(null);
   const handleSelectItem = (itemKey : any) => {
     handleShow2();
-    const itemDetails = region.find((item: { id: any; }) => item.id === itemKey);
+    const itemDetails = pays.find((item: { id: any; }) => item.id === itemKey);
     setSelectedItem(itemDetails);
   };
 
- 	const [region, setRegion] = useState([]);
-	
-	const [pays, setPays] = useState([]);
+ 	const [pays, setPays] = useState([]);
 	
 	
 
@@ -46,7 +44,7 @@ const  Region: React.FC = () => {
     }
 
     try {
-      const response = await fetch(url + 'region', {
+      const response = await fetch(url + 'pays', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -80,7 +78,7 @@ const  Region: React.FC = () => {
       }
     }
     try {
-      const response = await fetch(url + 'region', {
+      const response = await fetch(url + 'pays', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -103,7 +101,7 @@ const  Region: React.FC = () => {
   const handleDeleteClick = async (item : any) => {
     try {
       console.log(item);
-      const response = await fetch(url + 'region', {
+      const response = await fetch(url + 'pays', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -120,38 +118,17 @@ const  Region: React.FC = () => {
     }
   };
 
-    	const handleInputNomRegionChange = (event :any) => {
-		setSelectedItem({ ...selectedItem, nomRegion: event.target.value });
-	};
-	
-	const handleInputIdChange = (event :any) => {
+    	const handleInputIdChange = (event :any) => {
 		setSelectedItem({ ...selectedItem, id: event.target.value });
 	};
 	
-	const handleSelectPaysChange = (event : any) => {
-		setSelectedItem({ ...selectedItem, pays: event.target.value });
+	const handleInputNomChange = (event :any) => {
+		setSelectedItem({ ...selectedItem, nom: event.target.value });
 	};
 	
 	
 
     	useEffect(() => {
-		const getRegion = async () => {
-			try {
-				const response = await fetch(url + 'region');
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					};
-				const data = await response.json();
-				setRegion(data);
-			} catch (error :any) {
-				setError(error);
-			} finally {
-				setLoading(false);
-			}
-		};
-		getRegion();
-	}, []);
-	useEffect(() => {
 		const getPays = async () => {
 			try {
 				const response = await fetch(url + 'pays');
@@ -176,25 +153,17 @@ const  Region: React.FC = () => {
           <div className="col">
             <div className="row">
               <IonButton onClick={handleShow}>
-                Add Region
+                Add Pays
               </IonButton>
             </div>
 
             <IonModal isOpen={show} onDidDismiss={handleClose}>
               <form action="" method="" id="insert" onSubmit={handleSaveSubmit}>
                 	<div className="mb-3"> 
-	 	<label className="form-label">Nom Region</label> 
-	 	<input className="form-control" type="text" name="nomRegion" />
+	 	<label className="form-label">Nom</label> 
+	 	<input className="form-control" type="text" name="nom" />
 	</div>
-	<div className="mb-3"> 
-	 	<label className="form-label">id</label> 
-	 	<select className="form-control" name="pays" id="select-pays">
-			{pays.map((elt :any) => (
-				<option value={elt.id}>{elt.nom}</option>
-			))}
-			
-		</select>
-	</div>
+	
                 <IonButton type="submit" >
                   Save Changes
                 </IonButton>
@@ -206,20 +175,18 @@ const  Region: React.FC = () => {
           <table className="table">
             <thead id="table-head">
               <tr>
-                			<th> Nom Region </th>
-			<th> Id </th>
-			<th> Id Pays </th>
+                			<th> Id </th>
+			<th> Nom </th>
 
                 <th></th>
                 <th></th>
               </tr>
             </thead>
             <tbody id="table-body">
-              {region.map((item :any) => (
+              {pays.map((item :any) => (
                 <tr key={item.id}>
-                  		<td>{item.nomRegion}</td>
-		<td>{item.id}</td>
-		<td>{item.pays.nom}</td>
+                  		<td>{item.id}</td>
+		<td>{item.nom}</td>
 
                   <td>
                     <IonButton onClick={() => handleDeleteClick(item)}>
@@ -238,23 +205,14 @@ const  Region: React.FC = () => {
           <IonModal isOpen={show2} onDidDismiss={handleClose2}>
             <form action="" method="" id="update" onSubmit={handleUpdateSubmit}>
               	<div className="mb-3"> 
-	 	<label className="form-label">Nom Region</label> 
-	 	<input className="form-control" type="text" name="nomRegion" onChange={handleInputNomRegionChange} value={selectedItem ? selectedItem.nomRegion:''} />
-	</div>
-	<div className="mb-3"> 
 	 	<label className="form-label"></label> 
 	 	<input className="form-control" type="hidden" name="id" onChange={handleInputIdChange} value={selectedItem ? selectedItem.id:''} />
 	</div>
 	<div className="mb-3"> 
-	 	<label className="form-label">id</label> 
-	 	<select className="form-control" name="pays">
-			{pays.map((elt : any) => (
-		<option value={elt.id}>{elt.nom}</option>
-	))}
-	
-	
-	</select>
+	 	<label className="form-label">Nom</label> 
+	 	<input className="form-control" type="text" name="nom" onChange={handleInputNomChange} value={selectedItem ? selectedItem.nom:''} />
 	</div>
+	
               <IonButton type="submit">
                 Save Changes
               </IonButton>
@@ -266,4 +224,4 @@ const  Region: React.FC = () => {
   )
 }
 
-export default  Region;
+export default  Pays;
