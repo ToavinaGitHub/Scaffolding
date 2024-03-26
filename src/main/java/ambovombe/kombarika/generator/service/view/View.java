@@ -161,15 +161,24 @@ public class View {
     public String getFetcher(HashMap<String, String> columns, HashMap<String, String> foreignKeys, String table){
         String res = "";
         String template = this.getViewProperties().getFetch();
+    
         res += template
-            .replace("#entity#", table)
-            .replace("#Entity#", ObjectUtility.capitalize(table));
+            .replace("#entity#",table )
+            .replace("#paging#", "?page=")
+            .replace("#pagingSize#", "+ (currentPage - 1)")
+            .replace("#Entity#", ObjectUtility.capitalize(table))
+            .replace("#cValue#", "currentPage")
+            .replace("#haveContent#", ".content");
         for (Map.Entry<String, String> set : columns.entrySet()) {
             String temp = foreignKeys.get(set.getKey());
             if(temp != null){
                 res += this.getViewProperties().getFetch()
                 .replace("#entity#", ObjectUtility.formatToCamelCase(temp))
-                .replace("#Entity#", ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(temp)));
+                .replace("#paging#", "")
+                .replace("#pagingSize#", "")
+                .replace("#Entity#", ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(temp)))
+                .replace("#cValue#", "")
+                .replace("#haveContent#", "");
                 continue;
             }
         }
@@ -215,6 +224,7 @@ public class View {
         .replace("#handleInputSelectChange#", getHandleInputSelectChange(columns, foreignKeys, primaryKeys))
         .replace("#getValues#", getFetcher(columns, foreignKeys, table))
         .replace("#values#", getValues(columns, foreignKeys, table))
+        .replace("#valuesValue#", table)
         .replace("#entity#", ObjectUtility.formatToSpacedString(table))
         .replace("#tableValue#", getTableValue(columns, foreignKeys, attribute))
         .replace("#url#", url)

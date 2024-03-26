@@ -30,6 +30,10 @@ const  Region: React.FC = () => {
 	
 	
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3; 
+  const totalPageCount = Math.ceil(region.length / itemsPerPage);
+
   //////////// SAVE
   const handleSaveSubmit = async (event : any) => {
     event.preventDefault();
@@ -39,7 +43,7 @@ const  Region: React.FC = () => {
 
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id : value };
+        data[key] = { id: value };
       } else {
         data[key] = value;
       }
@@ -137,12 +141,12 @@ const  Region: React.FC = () => {
     	useEffect(() => {
 		const getRegion = async () => {
 			try {
-				const response = await fetch(url + 'region');
+				const response = await fetch(url + 'region?page='+ (currentPage - 1));
 					if (!response.ok) {
 						throw new Error('Network response was not ok');
 					};
 				const data = await response.json();
-				setRegion(data);
+				setRegion(data.content);
 			} catch (error :any) {
 				setError(error);
 			} finally {
@@ -150,7 +154,7 @@ const  Region: React.FC = () => {
 			}
 		};
 		getRegion();
-	}, []);
+	}, [currentPage]);
 	useEffect(() => {
 		const getPays = async () => {
 			try {
@@ -261,6 +265,22 @@ const  Region: React.FC = () => {
             </form>
           </IonModal>
         </div>
+        {/* Pagination */ }
+        <nav aria-label="Page navigation">
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => setCurrentPage(prevPage => prevPage - 1)} disabled={currentPage === 1}>Previous</button>
+          </li>
+          {[...Array(totalPageCount+1)].map((_, index) => (
+            <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => setCurrentPage(index + 1)}>{index + 1}</button>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPageCount+1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => setCurrentPage(prevPage => prevPage + 1)} disabled={currentPage === totalPageCount+1}>Next</button>
+          </li>
+        </ul>
+      </nav>
       </div>
     </IonPage>
   )

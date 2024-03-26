@@ -1,6 +1,5 @@
 package ambovombe.kombarika.generator.service.controller;
 
-import ambovombe.kombarika.configuration.mapping.LanguageProperties;
 import ambovombe.kombarika.configuration.mapping.*;
 import ambovombe.kombarika.generator.service.GeneratorService;
 import ambovombe.kombarika.generator.utils.ObjectUtility;
@@ -75,17 +74,48 @@ public class Controller{
         return Misc.tabulate(this.getLanguageProperties().getAnnotationSyntax().replace("?", this.getControllerProperty().getDelete()) + "\n" + function);
     }
 
-    public String findAll(String table){
+
+    public String findAllNoPage(String table){
         String body = "";
+    
         body += Misc.tabulate(this.getCrudMethod().getFindAll()
             .replace("#object#", ObjectUtility.formatToCamelCase(table))
             .replace("?", ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(table))));
+        
+        body = body.replace("#paging#", "");
         String function =  this.getLanguageProperties().getMethodSyntax()
                 .replace("#name#", "findAll")
                 .replace("#type#", this.getControllerProperty().getReturnType().replace("?", this.getLanguageProperties().getListSyntax().replace("?",ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(table)))))
                 .replace("#arg#", "")
-                .replace("#body#", body);
+                .replace("#body#", body);        
+       
         return Misc.tabulate(this.getLanguageProperties().getAnnotationSyntax().replace("?", this.getControllerProperty().getGet()) + "\n" + function);
+    }
+
+    public String findAll(String table){
+        String pageName = "page";
+        String body = "";
+        body+=this.getPagination(3)+"\n";
+       
+        body += Misc.tabulate(this.getCrudMethod().getFindAll()
+            .replace("#object#", ObjectUtility.formatToCamelCase(table))
+            .replace("?", ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(table))));
+        
+        body = body.replace("#paging#", "paging");
+        String function =  this.getLanguageProperties().getMethodSyntax()
+                .replace("#name#", "findAll")
+                .replace("#type#", this.getControllerProperty().getReturnType().replace("?", this.getLanguageProperties().getListSyntax().replace("?",ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(table)))))
+                .replace("#arg#", "@RequestParam(name=\""+pageName+"\") int page")
+                .replace("#body#", body);        
+        
+        String func_annotation = this.getControllerProperty().getGetPage();
+        func_annotation = func_annotation.replace("#pageName#", pageName);
+        return Misc.tabulate(this.getLanguageProperties().getAnnotationSyntax().replace("?", func_annotation) + "\n" + function);
+    }
+
+    public String getPagination(int nbParPage){
+        String res = "Pageable paging = PageRequest.of(page , "+nbParPage+");";
+        return res;
     }
 
     public String findById(String table) throws Exception{
@@ -105,6 +135,8 @@ public class Controller{
         stringBuilder.append(delete);
         stringBuilder.append("\n");
         stringBuilder.append(findAll);
+        stringBuilder.append("\n");
+        stringBuilder.append(findAllNoPage(table));
         return stringBuilder.toString();
     }
 
