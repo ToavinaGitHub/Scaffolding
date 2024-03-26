@@ -110,7 +110,9 @@
                             "entity.className",
                             "org.springframework.http.*",
                             "org.springframework.beans.factory.annotation.Autowired",
-                            "org.springframework.web.bind.annotation.*"
+                            "org.springframework.web.bind.annotation.*",
+                            "org.springframework.data.domain.PageRequest",
+                            "org.springframework.data.domain.Pageable"
                         ],
                         "entity":[
                             "jakarta.persistence.*"
@@ -118,6 +120,7 @@
                         "repository":[
                             "packageName.className",
                             "org.springframework.data.repository.CrudRepository",
+                            "org.springframework.data.jpa.repository.JpaRepository",
                             "org.springframework.data.jpa.repository.Query"
                         ]
                     },
@@ -139,7 +142,7 @@
                         }
                     },
                     "crudMethod" : {
-                        "findAll": "return ResponseEntity.ok(repository.findAll());",
+                        "findAll": "return ResponseEntity.ok(repository.findAll(#paging#));",
                         "findById":"return ResponseEntity.ok(repository.findById(#Id#));",
                         "delete": "repository.delete(#object#); return ResponseEntity.ok().build();",
                         "update": "return ResponseEntity.ok(repository.save(#object#));",
@@ -148,12 +151,14 @@
                     "controllerProperty" : {
                         "path": "RequestMapping(path = \"?\")",
                         "get": "GetMapping()",
+                        "getPage": "GetMapping(path = \"\" , params = {\"#pageName#\"})",
                         "post": "PostMapping()",
                         "put": "PutMapping()",
                         "delete": "DeleteMapping()",
                         "classSyntax": "?Controller",
                         "field": "private ?Repository repository;",
                         "returnType": "ResponseEntity<?>",
+                        
                         "annotationField": "Autowired",
                         "annotationMethodParameter":"",
                         "annotationArgumentParameterFormData":"RequestBody",
@@ -162,7 +167,7 @@
                     },
                     "repositoryProperty" : {
                         "name":"Repository",
-                        "classSyntax": "public interface ?Repository extends CrudRepository<?, #type#>",
+                        "classSyntax": "public interface ?Repository extends CrudRepository<?, #type#> , JpaRepository<?, #type#>",
                         "fieldSyntax": ""
                     }
 

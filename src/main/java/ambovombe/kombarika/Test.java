@@ -40,6 +40,8 @@ public class Test {
             // for(String table: tables)
             //     System.out.println(table);
             codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
+
+            
             // codeGenerator.generateEntity(path, "car", packageName+".entity", framework);
         }catch(Exception e){
             e.printStackTrace();

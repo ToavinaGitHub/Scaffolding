@@ -26,6 +26,10 @@ const  #entity#: React.FC = () => {
 
  #values#
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3; 
+  const totalPageCount = Math.ceil(#valuesValue#.length / itemsPerPage);
+
   //////////// SAVE
   const handleSaveSubmit = async (event : any) => {
     event.preventDefault();
@@ -35,7 +39,7 @@ const  #entity#: React.FC = () => {
 
     for (let [key, value] of formData.entries()) {
       if (form.elements[key].tagName === 'SELECT') {
-        data[key] = { id : value };
+        data[key] = { id: value };
       } else {
         data[key] = value;
       }
@@ -176,6 +180,22 @@ const  #entity#: React.FC = () => {
             </form>
           </IonModal>
         </div>
+        {/* Pagination */ }
+        <nav aria-label="Page navigation">
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => setCurrentPage(prevPage => prevPage - 1)} disabled={currentPage === 1}>Previous</button>
+          </li>
+          {[...Array(totalPageCount+1)].map((_, index) => (
+            <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => setCurrentPage(index + 1)}>{index + 1}</button>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPageCount+1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => setCurrentPage(prevPage => prevPage + 1)} disabled={currentPage === totalPageCount+1}>Next</button>
+          </li>
+        </ul>
+      </nav>
       </div>
     </IonPage>
   )
