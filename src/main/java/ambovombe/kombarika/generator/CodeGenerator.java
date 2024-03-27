@@ -169,6 +169,22 @@ public class CodeGenerator {
         FileUtility.generateFile(path, fileName, view);
     }
 
+    public void generateLoginView(
+        String url, 
+        String endPoint,
+        String email, 
+        String password,
+        String viewType,
+        String directory,
+        String path
+    ) throws Exception{
+        String view = buildLoginView(url, endPoint, email, password, viewType);
+        FileUtility.createDirectory(directory,path);
+        path = path + File.separator + directory;
+        String fileName = GeneratorService.getFileName("Login", this.getViewDetails().getViews().get(viewType).getExtension());
+        FileUtility.generateFile(path, fileName, view);
+    }
+
     /**
      * eg : generate -p path -t table1, table2, table3 -package name -l java:spring-boot
      * @author rakharrs
@@ -234,6 +250,12 @@ public class CodeGenerator {
         view.setViewProperties(this.getViewDetails().getViews().get(viewType));
         return view.generateView(table, url, dbConnection);
     }
+
+    public String buildLoginView(String url , String endPoint , String email , String password ,String viewType ) throws Exception{
+        View view = new View();
+        view.setViewProperties(this.getViewDetails().getViews().get(viewType));
+        return view.generateLoginView(url, endPoint, email, password);
+    }
     
     public void generateAllEntity(
         String path, 
@@ -287,7 +309,10 @@ public class CodeGenerator {
         for (String table : tables) {
             generateView(path, table, view, viewType, url); 
         }
+        
     }
+
+
 
     public void generateAll(
         String path, 

@@ -1,16 +1,13 @@
-
--Authentification
-    --Page de login
-    --Redirect to login Page
-    ---
-        ---
 -Pagination
     --Update controller index with an argument number of Page
     --Function return Page<Entity>
     --Pageable p = PageRequest.of(page , numberPerPage)
     return repo.findAll(paging)
-
     --Add bootstrap packages -g
     --add paging component
-    --
+
+-Authentification 
+    --Page de login
+    --controller login
+
 

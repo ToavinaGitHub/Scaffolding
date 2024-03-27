@@ -79,6 +79,7 @@
             "handleSelectItem":"const handleSelectItem = (itemKey) => {\n\thandleShow2();\n\tconst itemDetails = district.find(item => item.id === itemKey);\n\tsetSelectedItem(itemDetails);\n};\n",
             "extension":"tsx",
             "getSelectValue":"for (let [key, value] of formData.entries()) {\n\t  if (form.elements[key].tagName === 'SELECT') {\n\t\tdata[key] = { #idFk#: value };\n\t} else {\n\t\t data[key] = value;\n\t}\n}",
+            "templateLogin" : "ionic-react/ionicReactLogin.txt",
             "listMapping" : {
                 "Timestamp":"date-time local",
                 "Time":"time",
