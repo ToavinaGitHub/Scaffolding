@@ -1,0 +1,90 @@
+import React, { useRef, useState } from 'react';
+import {
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonInput,
+  IonButton,
+  IonContent,
+  IonPage,
+} from '@ionic/react';
+import { useHistory } from 'react-router';
+const Login: React.FC = () => {
+  const [#forEmail#, set#forEmailCptlz#] = useState('test@gmail.com');
+  const [loading, setLoading] = useState(false);
+  
+  const #forPassword#Ref = useRef<any>(null)
+  const history = useHistory();
+  const url = "";
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await fetch('#url##loginEndpoint#', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          #forEmail#:#forEmail#, 
+          #forPassword#:#forPassword#Ref.current.value ,
+        }),
+      });
+
+      console.log(response);
+      if (response.ok) {
+        localStorage.removeItem("error");
+        history.push('/mesAnnonces');
+      } else {
+        localStorage.setItem("error","Mot de passe ou email invalide");
+        history.push('/Login');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+    <IonPage>
+      <IonContent>
+        <IonCard>
+          <IonCardHeader className='header'>
+            <IonCardTitle class="card-title">Login</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <form onSubmit={handleSubmit}>
+              <IonInput
+                label='#forEmail#'
+                labelPlacement='floating'
+                fill='solid'
+                placeholder='#forEmail#'
+                value={#forEmail#}
+                onIonChange={(e) => set#forEmailCptlz#(e.detail.value!)}
+              ></IonInput>
+              <IonInput
+                label='#forPassword#'
+                type='password'
+                labelPlacement='floating'
+                fill='solid'
+                placeholder='#forPassword#'
+                value={"test"}
+                ref={#forPassword#Ref}
+              ></IonInput>
+              <IonButton type='submit' expand='block' fill='solid' color='primary'>
+              {loading ? "En cours..." : "Se connecter"}
+              </IonButton>
+            </form>
+            <p id="error">{localStorage.getItem("error") ? "#forEmail# or #forPassword# invalid" :"..."}</p>
+          </IonCardContent>
+        </IonCard>
+      </IonContent>
+    </IonPage>
+    </>
+  );
+};
+export default Login;

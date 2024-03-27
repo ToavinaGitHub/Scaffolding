@@ -234,4 +234,19 @@ public class View {
 
         return res;
     }
+
+    public String generateLoginView(String url,String endPoint,String forEmail , String forPassword) throws Exception{
+        String res = "";
+        String tempPath = Misc.getViewTemplateLocation().concat(File.separator).concat(this.getViewProperties().getTemplateLogin());
+        String template = FileUtility.readOneFile(tempPath);
+      
+        res = template.replace("#forEmail#", forEmail)
+            .replace("#forPassword#", forPassword)
+            .replace("#forEmailCptlz#", ObjectUtility.capitalize(forEmail))
+            .replace("#url#", url)
+            .replace("#loginEndpoint#", endPoint);
+
+        return res;
+    }
+
 }

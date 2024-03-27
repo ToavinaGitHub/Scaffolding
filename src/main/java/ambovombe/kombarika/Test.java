@@ -39,8 +39,11 @@ public class Test {
             String[] tables = DbService.getAllTablesArrays(codeGenerator.getDbConnection());
             // for(String table: tables)
             //     System.out.println(table);
-            codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
+            //codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
 
+
+            
+            codeGenerator.generateLoginView(url, "login", "email", "password", viewType, "view", path);
             
             // codeGenerator.generateEntity(path, "car", packageName+".entity", framework);
         }catch(Exception e){

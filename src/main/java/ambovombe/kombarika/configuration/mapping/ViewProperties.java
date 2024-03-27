@@ -10,6 +10,7 @@ public class ViewProperties {
     String inputUpdate;
     String tableHeader;
     String template;
+    String templateLogin;
     String select;
     String option;
     String selectUpdate;

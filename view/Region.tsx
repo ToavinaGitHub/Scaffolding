@@ -183,7 +183,6 @@ const  Region: React.FC = () => {
                 Add Region
               </IonButton>
             </div>
-
             <IonModal isOpen={show} onDidDismiss={handleClose}>
               <form action="" method="" id="insert" onSubmit={handleSaveSubmit}>
                 	<div className="mb-3"> 
