@@ -1,0 +1,52 @@
+CREATE SEQUENCE district_id_seq START 1;
+CREATE OR REPLACE FUNCTION generate_district_id() RETURNS VARCHAR AS $$
+DECLARE
+    next_id INTEGER;
+BEGIN
+    SELECT nextval('district_id_seq') INTO next_id;
+    RETURN 'TRANS' || LPAD(next_id::TEXT, 7, '0');
+END;
+$$ LANGUAGE plpgsql;
+ALTER TABLE district
+    ALTER COLUMN id_district SET DEFAULT generate_district_id();
+
+    
+CREATE SEQUENCE pays_id_seq START 1;
+CREATE OR REPLACE FUNCTION generate_pays_id() RETURNS VARCHAR AS $$
+DECLARE
+    next_id INTEGER;
+BEGIN
+    SELECT nextval('pays_id_seq') INTO next_id;
+    RETURN 'TRANS' || LPAD(next_id::TEXT, 7, '0');
+END;
+$$ LANGUAGE plpgsql;
+ALTER TABLE pays
+    ALTER COLUMN id_pays SET DEFAULT generate_pays_id();
+
+    
+CREATE SEQUENCE region_id_seq START 1;
+CREATE OR REPLACE FUNCTION generate_region_id() RETURNS VARCHAR AS $$
+DECLARE
+    next_id INTEGER;
+BEGIN
+    SELECT nextval('region_id_seq') INTO next_id;
+    RETURN 'TRANS' || LPAD(next_id::TEXT, 7, '0');
+END;
+$$ LANGUAGE plpgsql;
+ALTER TABLE region
+    ALTER COLUMN id_region SET DEFAULT generate_region_id();
+
+    
+CREATE SEQUENCE utilisateur_id_seq START 1;
+CREATE OR REPLACE FUNCTION generate_utilisateur_id() RETURNS VARCHAR AS $$
+DECLARE
+    next_id INTEGER;
+BEGIN
+    SELECT nextval('utilisateur_id_seq') INTO next_id;
+    RETURN 'TRANS' || LPAD(next_id::TEXT, 7, '0');
+END;
+$$ LANGUAGE plpgsql;
+ALTER TABLE utilisateur
+    ALTER COLUMN id_utilisateur SET DEFAULT generate_utilisateur_id();
+
+    

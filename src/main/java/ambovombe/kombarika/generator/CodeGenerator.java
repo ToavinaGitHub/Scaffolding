@@ -13,6 +13,7 @@ import ambovombe.kombarika.generator.parser.FileUtility;
 import ambovombe.kombarika.generator.service.DbService;
 import ambovombe.kombarika.generator.service.GeneratorService;
 import ambovombe.kombarika.generator.service.controller.Controller;
+import ambovombe.kombarika.generator.service.Sql.*;
 import ambovombe.kombarika.generator.service.entity.Entity;
 import ambovombe.kombarika.generator.service.repository.Repository;
 import ambovombe.kombarika.generator.service.view.View;
@@ -22,6 +23,8 @@ import lombok.Setter;
 
 import java.io.*;
 import java.util.List;
+
+import javax.xml.crypto.Data;
 
 
 /**
@@ -38,7 +41,12 @@ public class CodeGenerator {
 
     public CodeGenerator() throws Exception {
         this.dbConnection = new DbConnection();
-        this.dbConnection.init();
+        try {
+            this.dbConnection.init();
+        } catch (Exception e) {
+           
+        }
+        
         this.languageDetails = new LanguageDetails();
         this.languageDetails.init();
         this.typeProperties = new TypeProperties();
@@ -71,6 +79,19 @@ public class CodeGenerator {
         String language = splittedLang[0]; String framework = splittedLang[1];
         String controller = buildController(table, packageName, repository, entity, language, framework);
         generateControllerFile(path, table, packageName, language, framework, controller);
+    }
+
+    public void generateControllerThymeleaf(
+        String path, 
+        String table, 
+        String packageName, 
+        String lang,
+        String idType
+    ) throws Exception{
+        String[] splittedLang = lang.split(":");
+        String language = splittedLang[0]; String framework = splittedLang[1];
+        String controller = buildControllerThymeleaf(table, packageName, language, framework,idType);
+        generateControllerThymeleafFile(path, table, packageName, language, framework, controller);
     }
 
     public void generateRepositoryFile(
@@ -168,17 +189,32 @@ public class CodeGenerator {
         String fileName = GeneratorService.getFileName(table, this.getViewDetails().getViews().get(viewType).getExtension());
         FileUtility.generateFile(path, fileName, view);
     }
+    public void generateThymeleafView(
+        String path, 
+        String viewType,
+        String table,
+        String project,
+        String directory
+    ) throws Exception{
+        String view = buildViewThymeleaf(table, project, viewType);
+        FileUtility.createDirectory(directory,path);
+        path = path + File.separator + directory;
+        String fileName = GeneratorService.getFileName(table, this.getViewDetails().getViews().get(viewType).getExtension());
+        FileUtility.generateFile(path, fileName, view);
+    }
+
 
     public void generateLoginView(
         String url, 
         String endPoint,
+        String tableName,
         String email, 
         String password,
         String viewType,
         String directory,
         String path
     ) throws Exception{
-        String view = buildLoginView(url, endPoint, email, password, viewType);
+        String view = buildLoginView(url, endPoint,tableName, email, password, viewType);
         FileUtility.createDirectory(directory,path);
         path = path + File.separator + directory;
         String fileName = GeneratorService.getFileName("Login", this.getViewDetails().getViews().get(viewType).getExtension());
@@ -230,6 +266,30 @@ public class CodeGenerator {
         return controller.generateController(template, table, packageName, repository, entity, framework);
     }
 
+
+    public String buildControllerThymeleaf(String table,String packageName, String language,String framework,String idType) throws Exception{
+        LanguageProperties languageProperties = getLanguageDetails().getLanguages().get(language);
+        FrameworkProperties frameworkProperties = languageProperties.getFrameworks().get(framework);
+        String template = frameworkProperties.getTemplate();
+        Controller controller = new Controller();
+        return controller.generateThymeleafController(template,packageName,table,idType);
+    }
+
+    public void generateControllerThymeleafFile(
+        String path,
+        String table,
+        String packageName,
+        String language,
+        String framework,
+        String content
+    ) throws Exception{
+        LanguageProperties languageProperties = getLanguageDetails().getLanguages().get(language);
+        String directory = packageName.replace(".", File.separator);
+        FileUtility.createDirectory(directory,path);
+        path = path + File.separator + directory;
+        FileUtility.generateFile(path, GeneratorService.getFileName(table+"Controller", languageProperties.getExtension()), content);
+    }
+
     public void generateControllerFile(
         String path,
         String table,
@@ -251,12 +311,33 @@ public class CodeGenerator {
         return view.generateView(table, url, dbConnection);
     }
 
-    public String buildLoginView(String url , String endPoint , String email , String password ,String viewType ) throws Exception{
+    public String buildLoginView(String url , String endPoint , String tableName,String email , String password ,String viewType ) throws Exception{
         View view = new View();
         view.setViewProperties(this.getViewDetails().getViews().get(viewType));
-        return view.generateLoginView(url, endPoint, email, password);
+        return view.generateLoginView(url, endPoint,tableName, email, password);
     }
     
+    public String buildViewThymeleaf(String table,String project, String viewType) throws Exception{
+        View view = new View();
+        view.setViewProperties(this.getViewDetails().getViews().get(viewType));
+        return view.generateThymeleafView(table, project,dbConnection);
+    }
+    
+    public String buildSequenceSql(String table) throws Exception{
+        Sql sql = new Sql();
+        return sql.generateSequence(table);
+    }
+
+
+    public void generateFileSequence(String path, String[] tables) throws Exception{
+
+        String res = "";
+        for (String table : tables) {
+            res += buildSequenceSql(table);
+        }
+        FileUtility.generateFile(path, "sequence.txt", res);
+    
+    }
     public void generateAllEntity(
         String path, 
         String[] tables, 
@@ -279,6 +360,16 @@ public class CodeGenerator {
     )  throws Exception{
         for (String table : tables) {
             generateController(path, table, packageName + "." + controller, packageName + "." + repository, packageName + "." + "entity", framework);  
+        }
+    }
+    public void generateAllControllerThymeleaf(
+        String path, 
+        String[] tables,
+        String packageName, 
+        String framework
+    )  throws Exception{
+        for (String table : tables) {
+           generateControllerThymeleaf(path, ObjectUtility.formatToCamelCase(table), packageName, framework,DbService.getPrimaryKeyType(dbConnection, table).get(0));
         }
     }
     
@@ -312,7 +403,18 @@ public class CodeGenerator {
         
     }
 
-
+    public void generateAllThymeleafView(
+        String path, 
+        String[] tables,
+        String view,
+        String viewType,
+        String project
+    )  throws Exception{
+        for (String table : tables) {
+            generateThymeleafView(path, viewType, ObjectUtility.formatToCamelCase(table), project, view);
+        }
+        
+    }
 
     public void generateAll(
         String path, 
@@ -329,6 +431,7 @@ public class CodeGenerator {
         generateAllEntity(path, tables, packageName ,entity, framework);
         generateAllRepository(path, tables, packageName , entity, repository, framework);
         generateAllController(path, tables, packageName, entity, controller, repository, framework);  
+        
         generateAllView(path, tables, view, viewType, url);    
     }
 }

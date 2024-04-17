@@ -1,0 +1,135 @@
+package #path#.Controller;
+
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import #path#.Model.#entityMaj#;
+import #path#.Repository. #entityMaj#Repository;
+
+import org.springframework.ui.Model;
+
+@RequestMapping("/v1/#entity#")
+@Controller
+public class #entityMaj#Controller {
+
+    @Autowired
+    private #entityMaj#Repository  #entity#Repository;
+
+    @GetMapping("")
+    public String index(Model model , @RequestParam(name = "keyword" ,required = false) String key,
+      @RequestParam(defaultValue = "1" , required = false ,name = "page") int page, @RequestParam(defaultValue = "3" , required = false ,name = "size") int size)  {
+        List<#entityMaj#> #entity#s = new ArrayList<#entityMaj#>();
+
+        Pageable pageable =PageRequest.of(page-1,size);
+
+        Page<#entityMaj#> pageCateg;
+        if(key==null){
+            //pageCateg = #entity#Repository.find#entityMaj#ByEtat(pageable);
+        }else{
+            //pageCateg =  #entity#Repository.findCategorieByNomCategorieContainingIgnoreCase(key,pageable);
+        }
+
+        #entityMaj# c = new #entityMaj#();
+
+        #entity#s = pageCateg.getContent();
+
+        model.addAttribute("keyword" , key);
+        model.addAttribute("#entity#" , c);
+        model.addAttribute("#entity#s", #entity#s);
+
+        model.addAttribute("currentPage", pageCateg.getNumber() + 1);
+        model.addAttribute("totalItems", pageCateg.getTotalElements());
+        model.addAttribute("totalPages", pageCateg.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        return "#entityMaj#/index";
+    }
+
+    @PostMapping("")
+    public String save(@Valid #entityMaj# #entity# , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()){
+            String message = "";
+            for (int i = 0; i < bindingResult.getAllErrors().size(); i++) {
+                message += bindingResult.getAllErrors().get(i).getDefaultMessage()+";";
+            }
+            redirectAttributes.addFlashAttribute("error", message);
+            return "redirect:/v1/#entity#";
+        }
+        try{
+            #entity#.setEtat(1);
+            #entity#Repository.save(#entity#);
+            redirectAttributes.addFlashAttribute("success", "#entityMaj# ajoutée avec succès");
+            redirectAttributes.addFlashAttribute("message" , "Insertion avec succes");
+        }catch(Exception e){
+            redirectAttributes.addFlashAttribute("error", "Transaction echouée");
+        }
+
+        return "redirect:/v1/#entity#";
+    }
+    @GetMapping("/{id}")
+    public String editTutorial(@PathVariable("id") #idType# id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            #entityMaj# t = #entity#Repository.findById(id).get();
+
+            model.addAttribute("#entity#", t);
+            model.addAttribute("pageTitle", "Edit #entityMaj# (ID: " + id + ")");
+
+            //List<#entityMaj#> #entity#s = #entity#Repository.findAll();
+
+            List<#entityMaj#> #entity#s = #entity#Repository.find#entityMaj#ByEtat(1);
+            
+            model.addAttribute("isUpdate" , 1);
+            model.addAttribute("#entity#s", #entity#s);
+            return "#entityMaj#/index";
+        } catch (Exception e) {
+
+            redirectAttributes.addFlashAttribute("error", "Transaction echouée");
+            return "redirect:/v1/#entity#";
+        }
+    }
+
+    @GetMapping("/delOption")
+    public String delete(@RequestParam #idType# id , RedirectAttributes redirectAttributes){
+        #entityMaj# ct =  #entity#Repository.findById(id).get();
+        //#entity#Repository.delete(ct);
+        ct.setEtat(0);
+        #entity#Repository.save(ct);
+
+        redirectAttributes.addFlashAttribute("message" , "Supprimé avec succés");
+        return "redirect:/v1/#entity#";
+    }
+
+    @PostMapping("/edit")
+    public String modifier(@Valid @ModelAttribute #entityMaj# #entity#,BindingResult bindingResult,RedirectAttributes redirectAttributes){
+        String message = "";
+        if(bindingResult.hasErrors()){
+            for (int i = 0; i < bindingResult.getAllErrors().size(); i++) {
+                message += bindingResult.getAllErrors().get(i).getDefaultMessage()+";";
+            }
+            redirectAttributes.addFlashAttribute("error", message);
+    
+            return "redirect:/v1/#entity#";
+        }
+        try{
+             #entity#Repository.save(#entity#);
+        }catch (Exception e){
+            message += e.getMessage()+" ; ";
+            redirectAttributes.addFlashAttribute("error", message);
+            return "redirect:/v1/#entity#";
+        }
+
+        redirectAttributes.addFlashAttribute("message" , "Modification avec succes");
+        return "redirect:/v1/#entity#";
+    }
+
+}

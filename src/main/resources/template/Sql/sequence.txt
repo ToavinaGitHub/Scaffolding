@@ -1,0 +1,13 @@
+CREATE SEQUENCE #table#_id_seq START 1;
+CREATE OR REPLACE FUNCTION generate_#table#_id() RETURNS VARCHAR AS $$
+DECLARE
+    next_id INTEGER;
+BEGIN
+    SELECT nextval('#table#_id_seq') INTO next_id;
+    RETURN 'TRANS' || LPAD(next_id::TEXT, 7, '0');
+END;
+$$ LANGUAGE plpgsql;
+ALTER TABLE #table#
+    ALTER COLUMN id_#table# SET DEFAULT generate_#table#_id();
+
+    

@@ -1,6 +1,7 @@
 package ambovombe.kombarika.generator.service.view;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,6 +166,7 @@ public class View {
         res += template
             .replace("#entity#",table )
             .replace("#paging#", "?page=")
+            .replace("#count#","setCount(data.totalElements)")
             .replace("#pagingSize#", "+ (currentPage - 1)")
             .replace("#Entity#", ObjectUtility.capitalize(table))
             .replace("#cValue#", "currentPage")
@@ -175,6 +177,7 @@ public class View {
                 res += this.getViewProperties().getFetch()
                 .replace("#entity#", ObjectUtility.formatToCamelCase(temp))
                 .replace("#paging#", "")
+                .replace("#count#","")
                 .replace("#pagingSize#", "")
                 .replace("#Entity#", ObjectUtility.capitalize(ObjectUtility.formatToCamelCase(temp)))
                 .replace("#cValue#", "")
@@ -225,17 +228,31 @@ public class View {
         .replace("#getValues#", getFetcher(columns, foreignKeys, table))
         .replace("#values#", getValues(columns, foreignKeys, table))
         .replace("#valuesValue#", table)
-        .replace("#entity#", ObjectUtility.formatToSpacedString(table))
+        .replace("#entity#", ObjectUtility.formatToCamelCase(ObjectUtility.capitalize(table))) ///---------
         .replace("#tableValue#", getTableValue(columns, foreignKeys, attribute))
         .replace("#url#", url)
         .replace("#id#", ObjectUtility.formatToCamelCase(primaryKeys.get(0)))
-        .replace("#path#", path)
+        .replace("#path#",table) //-------------
         .replace("#label#", ObjectUtility.formatToCamelCase(primaryKeys.get(0)));
 
         return res;
     }
 
-    public String generateLoginView(String url,String endPoint,String forEmail , String forPassword) throws Exception{
+    public String generateLoginView(String url,String endPoint,String tableName,String forEmail , String forPassword) throws Exception{
+        DbConnection db = new DbConnection();
+        db.init();
+
+        if(!DbService.checkIfTableExist(db, tableName)){
+            throw new Exception("Table inexistante");
+        }
+        List<String> cols = new ArrayList<>();
+        cols.add(forEmail);
+        cols.add(forPassword);
+
+        if(!DbService.CheckColumn(cols, tableName, db)) {
+            throw new Exception("Colonne invalide");
+        }
+
         String res = "";
         String tempPath = Misc.getViewTemplateLocation().concat(File.separator).concat(this.getViewProperties().getTemplateLogin());
         String template = FileUtility.readOneFile(tempPath);
@@ -245,6 +262,19 @@ public class View {
             .replace("#forEmailCptlz#", ObjectUtility.capitalize(forEmail))
             .replace("#url#", url)
             .replace("#loginEndpoint#", endPoint);
+
+        return res;
+    }
+
+    public String generateThymeleafView(String entity,String project,DbConnection dbConnection) throws Exception{
+        String res = "";
+        String tempPath = Misc.getViewTemplateLocation().concat(File.separator).concat(this.getViewProperties().getTemplate());
+        String template = FileUtility.readOneFile(tempPath);
+
+       
+        res = template.replace("#project#", project)
+            .replace("#entity#", entity);
+          
 
         return res;
     }

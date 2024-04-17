@@ -75,7 +75,7 @@
             "handleSelectChange":"const handleSelect#Name#Change = (event : any) => {\n\tsetSelectedItem({ ...selectedItem, #name#: event.target.value });\n};\n",
             "values":"const [#entity#, set#Entity#] = useState([]);\n",
             "tableValue":"<td>{item.#values#}</td>",
-            "fetch":"useEffect(() => {\n\tconst get#Entity# = async () => {\n\t\ttry {\n\t\t\tconst response = await fetch(url + '#entity##paging#'#pagingSize#);\n\t\t\t\tif (!response.ok) {\n\t\t\t\t\tthrow new Error('Network response was not ok');\n\t\t\t\t};\n\t\t\tconst data = await response.json();\n\t\t\tset#Entity#(data#haveContent#);\n\t\t} catch (error :any) {\n\t\t\tsetError(error);\n\t\t} finally {\n\t\t\tsetLoading(false);\n\t\t}\n\t};\n\tget#Entity#();\n}, [#cValue#]);\n",
+            "fetch":"useEffect(() => {\n\tconst get#Entity# = async () => {\n\t\ttry {\n\t\t\tconst response = await fetch(url + '#entity##paging#'#pagingSize#);\n\t\t\t\tif (!response.ok) {\n\t\t\t\t\tthrow new Error('Network response was not ok');\n\t\t\t\t};\n\t\t\tconst data = await response.json();\n\t\t\tset#Entity#(data#haveContent#);\n\t\t#count#} catch (error :any) {\n\t\t\tsetError(error);\n\t\t} finally {\n\t\t\tsetLoading(false);\n\t\t}\n\t};\n\tget#Entity#();\n}, [#cValue#]);\n",
             "handleSelectItem":"const handleSelectItem = (itemKey) => {\n\thandleShow2();\n\tconst itemDetails = district.find(item => item.id === itemKey);\n\tsetSelectedItem(itemDetails);\n};\n",
             "extension":"tsx",
             "getSelectValue":"for (let [key, value] of formData.entries()) {\n\t  if (form.elements[key].tagName === 'SELECT') {\n\t\tdata[key] = { #idFk#: value };\n\t} else {\n\t\t data[key] = value;\n\t}\n}",
@@ -94,6 +94,12 @@
                 "BigInt":"number",
                 "[B":"file"
             }
+
+        },
+        "thymeleaf":{
+            "template":"thymeleaf/thymeleaf.txt",
+            "header":"\t<th> #label# </th>",
+            "extension":"html"
         }
     }
 }

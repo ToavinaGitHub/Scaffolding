@@ -153,6 +153,7 @@ public class Controller{
     }
     
 
+    
     public String getControllerClass(String table, String framework){
         String res = "";
         res += this.getLanguageProperties().getAnnotationSyntax()
@@ -199,6 +200,15 @@ public class Controller{
                 .replace("#constructors#", getConstructor(table))
                 .replace("#methods#", getCrudMethods(table))
                 .replace("#encapsulation#", "");
+        return res;
+    }
+
+    public String generateThymeleafController(String template,String path, String table,String idType) throws Exception {
+        String res = template
+                .replace("#path#", path)
+                .replace("#entity#", table)
+                .replace("#idType#", idType)
+                .replace("#entityMaj#", ObjectUtility.capitalize(table));
         return res;
     }
 }

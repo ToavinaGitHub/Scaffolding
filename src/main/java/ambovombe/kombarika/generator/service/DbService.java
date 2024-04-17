@@ -139,6 +139,7 @@ public class DbService {
 
     public static List<String> getPrimaryKey(DbConnection dbConnection, String tableName) throws Exception{
         String query = dbConnection.getListConnection().get(dbConnection.getInUseConnection()).getDatabaseType().getPrimaryKeyQuery();
+       
         ArrayList<String> listPrimaryKeys = new ArrayList<>();
         query = query.replace("?", tableName);
         PreparedStatement stmt = dbConnection.getConnection().prepareCall(query);
@@ -176,7 +177,31 @@ public class DbService {
         return listPrimaryKeysType;
     }
 
-    
+
+    //Check if columns in table
+
+    public static boolean CheckColumn(List<String> cols , String tableName,DbConnection db) throws Exception{
+        int count =0 ;
+        HashMap<String,String> allCols = getDetailsColumn(db.getConnection(), tableName);
+        for (Map.Entry<String, String> col : allCols.entrySet()) {
+            if(cols.contains(col.getKey())){
+                count++;
+            }
+        }   
+        if(count==cols.size()){
+            return true;
+        }
+        return false;
+    }
+
+    //Check if table exist
+    public static boolean checkIfTableExist(DbConnection dbConnection,String tableName)throws Exception{
+        if(getAllTables(dbConnection).contains(tableName)){
+            return true;
+        }
+        return false;
+    }
+
 //     public static void getForeignKeys(Connection con, String tableName) throws Exception{
 //         String query = "SELECT * FROM "+tableName;
 //         DatabaseMetaData meta = con.getMetaData();
@@ -197,5 +222,8 @@ public class DbService {
 //         }
 // //        return map;   
 //     }
+
+
+    
 
 }

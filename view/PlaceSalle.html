@@ -1,0 +1,109 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head(title='placeSalle')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header(title='Tsakitsaky')}"></header>
+<aside th:replace="~{fragments/aside :: aside}"></aside>
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>placeSalle</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">placeSalle</li>
+            </ol>
+        </nav>
+    </div>
+    <section class="section">
+        <!-- Affichage message-->
+        <div th:replace="~{fragments/message :: MessageAlert}"></div>
+        <!-- Fin Affichage message-->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class=" card-body">
+                        <h5 class="card-title" th:if="${isUpdate == null}">Insertion de placeSalle</h5>
+                        <h5 class="card-title" th:if="${isUpdate}">Modification de placeSalle</h5>
+                        <form class="row g-3" method="post" th:action="${isUpdate==null ? '/v1/placeSalle' : '/v1/placeSalle/edit'}" th:object="${placeSalle}" encType="multipart/form-data">
+                            <input type="hidden" th:field="*{id}">
+                            <!-- <input type="hidden" th:field="*{etat}"> -->
+                            <div class="col-md-12">
+                                <label for="inputName5" class="form-label">Nom du pack </label>
+                                <input type="text" th:field="*{}" class="form-control" id="inputName5" data-parsley-trigger="change" required="" >
+                            </div>
+                            <!--<div class="col-md-12">
+                                <label for="salle" class="form-label">Salle</label>
+                                <select class="form-control" id="salle" th:field="*{salle}">
+                                    <option th:each="salle : ${salles}" th:value="${salle.getIdSalle()}" th:text="${salle.getNom()}"></option>
+                                </select>
+                            </div>-->
+                            <div class="text-center">
+                                <input type="submit" class="btn btn-primary" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- Recherche par mot clé-->
+                        <form th:replace="~{fragments/KeywordSearch :: Search(url='/v1/placeSalle') }">
+                        </form>
+                        <!-- Fin Recherche par mot clé-->
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">placeSalle data</h5>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="placeSalle : ${placeSalles}">
+                                <th scope="row" th:text="${}"></th>
+                                <td th:text="${}"></td>
+                                <td th:text="${}"></td>
+                                <td>
+                                    <a th:href="@{'/v1/placeSalle/' + ${placeSalle.getId()}}"><button class="btn btn-warning"  ><i class="bi bi-pencil-square"></i></button></a>
+                                    <a th:href="@{'/v1/placeSalle/delOption?id=' + ${placeSalle.getId()}} " class="btn-delete"><button  class="btn btn-danger"><i class="bi bi-trash"></i></button></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav th:replace="~{fragments/Pagination :: Pagination('/v1/placeSalle')}">
+            </nav>
+            <!-- Fin Pagination -->
+
+
+
+        </div>
+    </section>
+
+</main>
+</body>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<div th:replace="~{fragments/script :: script}"></div>
+<!--delete modal -->
+<div th:replace="~{fragments/DeleteConfirmation :: Delete}"></div>
+<!-- fin delete modal -->
+<script>
+    $(document).ready(function() {
+        $('#formValidation').parsley();
+    });
+
+</script>
+
+</html>

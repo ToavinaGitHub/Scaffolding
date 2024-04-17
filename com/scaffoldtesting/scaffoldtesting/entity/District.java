@@ -19,9 +19,6 @@ public class District {
 	@Column(name = "id_district")
 	Integer idDistrict;
 
-
-
-
 	public District(){}
 
 	public String getNomDistrict(){
