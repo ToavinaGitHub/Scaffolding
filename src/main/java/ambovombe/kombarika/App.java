@@ -1,5 +1,4 @@
 package ambovombe.kombarika;
-import java.io.Console;
 import java.util.Scanner;
 
 import ambovombe.kombarika.database.DbConnection;
@@ -89,7 +88,7 @@ public class App {
             dbConnection.setConnection(dbProperties.connect());
             System.out.println(ConsoleColors.GREEN+"Connexion à la base de données réussie"+ConsoleColors.RESET);
         } catch (Exception e) {
-            System.out.println(ConsoleColors.RED+""+ConsoleColors.RED_BACKGROUND+"Erreur de connexion à la base de données : " + e.getMessage()+ConsoleColors.RESET);
+            System.out.println(ConsoleColors.RED+"Erreur de connexion à la base de données : " + e.getMessage()+ConsoleColors.RESET);
             System.exit(1);
         }
 
@@ -142,9 +141,13 @@ public class App {
         }
         System.out.print(">>");
         String viewType = scanner.nextLine();
+        int indexV=0;
         if (viewType.isEmpty()) {
             viewType = "1";
+        }else{
+            indexV = Integer.parseInt(viewType)-1;
         }
+
         viewType = viewTypes[Integer.parseInt(viewType) - 1];
        
         System.out.println("Entrez l'URL (Par défaut: 'http://localhost:8080/') :");
@@ -155,7 +158,6 @@ public class App {
         }
         // Génération de classes
         System.out.println(ConsoleColors.BLUE_BOLD + "---------------------------------Génération des classes-----------------------------------------" + ConsoleColors.RESET);
-       
 
         HashMap<String, DbProperties> listConnections = new HashMap<>();
         listConnections.put("DefaultConnection", dbProperties);
@@ -165,7 +167,6 @@ public class App {
 
         CodeGenerator codeGenerator = new CodeGenerator();
         codeGenerator.setDbConnection(dbConnection);
-        
 
         String entity = "Model";
         String controller = "Controller";
@@ -180,13 +181,26 @@ public class App {
         String table = scanner.nextLine();
         String[] splits = table.split(",");
         if(splits.length==1 && table.equals("")){
-            codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
+          
+            if(indexV==1){
+                codeGenerator.generateAllControllerThymeleaf("./", tables, packageName,"java:spring");
+                codeGenerator.generateAllThymeleafView(path, tables, view, "thymeleaf", packageName);
+            }else{
+                codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
+            }
+            
         }else if(splits.length==1){
             try{
                 int index = Integer.parseInt(table)-1;
                 String [] tabs = new String[1];
                 tabs[0] = tables[index];
-                codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tabs, framework);
+
+                if(indexV==1){
+                    codeGenerator.generateAllControllerThymeleaf("./", tabs, packageName,"java:spring");
+                    codeGenerator.generateAllThymeleafView(path, tabs, view, "thymeleaf", packageName);    
+                }else{
+                    codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tabs, framework);
+                }
             }catch(Exception e){
                 System.out.println("Veuillez entrer un nombre valide");
                 System.out.println(e.getMessage());
@@ -204,7 +218,12 @@ public class App {
                     System.exit(0);
                 }
             }
-            codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tabs, framework);
+            if(indexV==1){
+                codeGenerator.generateAllControllerThymeleaf("./", tabs, packageName,"java:spring");
+                codeGenerator.generateAllThymeleafView(path, tabs, view, "thymeleaf", packageName);    
+            }else{
+                codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tabs, framework);
+            }
         }
 
         System.out.println(ConsoleColors.GREEN+"Génération terminée"+ConsoleColors.RESET);

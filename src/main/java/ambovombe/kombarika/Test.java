@@ -32,7 +32,7 @@ public class Test {
         try{
             String[] tables = DbService.getAllTablesArrays(codeGenerator.getDbConnection());
 
-            codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
+            //codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
 
             //codeGenerator.generateAllControllerThymeleaf("./", tables, "com.cinepax.mg", "java:spring");
             

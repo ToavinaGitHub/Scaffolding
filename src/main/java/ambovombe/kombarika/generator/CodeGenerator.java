@@ -158,7 +158,7 @@ public class CodeGenerator {
         String[] splittedLang = lang.split(":");
         String language = splittedLang[0]; String framework = splittedLang[1];
         String repository = buildRepository(table, packageName, entityPackage, language, framework);
-        System.out.println(entityPackage);
+        
         generateRepositoryFile(path, table, packageName, language, framework, repository);
     }
 
