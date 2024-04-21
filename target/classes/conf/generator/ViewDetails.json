@@ -66,7 +66,7 @@
             "inputInsert":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<input className=\"form-control\" type=\"#type#\" name=\"#name#\" />\n</div>",
             "inputUpdate":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<input className=\"form-control\" type=\"#type#\" name=\"#name#\" onChange={handleInput#Name#Change} value={selectedItem ? selectedItem.#name#:''} />\n</div>",
             "select":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<select className=\"form-control\" name=\"#name#\" id=\"select-#name#\">\n#option#\n\t</select>\n</div>",
-            "selectUpdate":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<select className=\"form-control\" name=\"#name#\">\n\t#optionUpdate#\n</select>\n</div>",
+            "selectUpdate":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<select className=\"form-control\" name=\"#name#\" value={selectedItem ? selectedItem.#name#.id : ''} onChange={handleSelect#Name#Change} >\n\t#optionUpdate#\n</select>\n</div>",
             "option":"{#listFK#.map((elt :any) => (\n\t<option value={elt.#id#}>{elt.#attribute#}</option>\n))}\n",
             "optionUpdate":"{#listFK#.map((elt : any) => (\n\t<option value={elt.#id#}>{elt.#attribute#}</option>\n))}\n",
             "tableHeader":"\t<th> #label# </th>",

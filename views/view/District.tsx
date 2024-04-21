@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { IonButton, IonModal,IonPage } from '@ionic/react';
+import { IonButton, IonModal,IonPage,IonIcon,IonAlert } from '@ionic/react';
 
+import { trash,pencil } from "ionicons/icons";
 const  District: React.FC = () => {
   const url = 'http://localhost:8080/';
 
@@ -17,6 +18,8 @@ const  District: React.FC = () => {
 
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
+
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] =  useState<any>(null);
@@ -106,24 +109,33 @@ const  District: React.FC = () => {
   };
 
   //////////// DELETE
-  const handleDeleteClick = async (item : any) => {
+  const handleDeleteClick = (item: any) => {
+    setSelectedItem(item);
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
-      console.log(item);
       const response = await fetch(url + 'district', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(item)
+        body: JSON.stringify(selectedItem)
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      // If you want to reload the page after success
+      setShowConfirmationModal(false);
+      // Refresh the data after deletion
       window.location.reload();
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmationModal(false);
   };
 
     	const handleInputNomDistrictChange = (event :any) => {
@@ -189,11 +201,11 @@ const  District: React.FC = () => {
             <IonModal isOpen={show} onDidDismiss={handleClose}>
               <form action="" method="" id="insert" onSubmit={handleSaveSubmit}>
                 	<div className="mb-3"> 
-	 	<label className="form-label">Nom District</label> 
+	 	<label className="form-label">nomDistrict</label> 
 	 	<input className="form-control" type="text" name="nomDistrict" />
 	</div>
 	<div className="mb-3"> 
-	 	<label className="form-label">idDistrict</label> 
+	 	<label className="form-label">Region</label> 
 	 	<select className="form-control" name="region" id="select-region">
 			{region.map((elt :any) => (
 				<option value={elt.id}>{elt.nomRegion}</option>
@@ -201,8 +213,12 @@ const  District: React.FC = () => {
 			
 		</select>
 	</div>
-                <IonButton type="submit" >
-                  Save Changes
+
+                <IonButton color={"danger"} onClick={handleClose}>
+                  Close
+                </IonButton>
+                <IonButton color={"success"} type="submit" >
+                  Save 
                 </IonButton>
               </form>
             </IonModal>
@@ -213,10 +229,9 @@ const  District: React.FC = () => {
             <thead id="table-head">
               <tr>
                 			<th> Nom District </th>
-			<th> Id Region </th>
+			<th> Region </th>
 			<th> Id District </th>
 
-                <th></th>
                 <th></th>
               </tr>
             </thead>
@@ -228,13 +243,11 @@ const  District: React.FC = () => {
 		<td>{item.idDistrict}</td>
 
                   <td>
-                    <IonButton onClick={() => handleDeleteClick(item)}>
-                      Delete
+                    <IonButton onClick={() => handleDeleteClick(item)} color={"danger"}>
+                      <IonIcon aria-hidden="true" icon={trash} />
                     </IonButton>
-                  </td>
-                  <td>
-                    <IonButton onClick={() => handleSelectItem(item.idDistrict)}>
-                      Update
+                    <IonButton onClick={() => handleSelectItem(item.idDistrict)} color={"success"}>
+                      <IonIcon aria-hidden="true" icon={pencil} />
                     </IonButton>
                   </td>
                 </tr>
@@ -248,8 +261,8 @@ const  District: React.FC = () => {
 	 	<input className="form-control" type="text" name="nomDistrict" onChange={handleInputNomDistrictChange} value={selectedItem ? selectedItem.nomDistrict:''} />
 	</div>
 	<div className="mb-3"> 
-	 	<label className="form-label">idDistrict</label> 
-	 	<select className="form-control" name="region">
+	 	<label className="form-label">Region</label> 
+	 	<select className="form-control" name="region" value={selectedItem ? selectedItem.region.id : ''} onChange={handleSelectRegionChange} >
 			{region.map((elt : any) => (
 		<option value={elt.id}>{elt.nomRegion}</option>
 	))}
@@ -261,10 +274,34 @@ const  District: React.FC = () => {
 	 	<input className="form-control" type="hidden" name="idDistrict" onChange={handleInputIdDistrictChange} value={selectedItem ? selectedItem.idDistrict:''} />
 	</div>
 	
-              <IonButton type="submit">
+
+              <IonButton color={"danger"} onClick={handleClose2}>
+                  Close
+              </IonButton>
+              <IonButton color={"success"} type="submit">
                 Save Changes
               </IonButton>
             </form>
+          </IonModal>
+          <IonModal isOpen={showConfirmationModal} onDidDismiss={() => setShowConfirmationModal(false)}>
+            <IonAlert
+              isOpen={showConfirmationModal}
+              onDidDismiss={() => setShowConfirmationModal(false)}
+              header={'Confirm Deletion'}
+              message={'Are you sure you want to delete this item?'}
+              buttons={[
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  cssClass: 'secondary',
+                  handler: handleCancelDelete
+                },
+                {
+                  text: 'Delete',
+                  handler: handleConfirmDelete
+                }
+              ]}
+            />
           </IonModal>
         </div>
         {/* Pagination */ }

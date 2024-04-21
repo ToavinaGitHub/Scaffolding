@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { IonButton, IonModal,IonPage } from '@ionic/react';
+import { IonButton, IonModal,IonPage,IonIcon,IonAlert } from '@ionic/react';
 
+import { trash,pencil } from "ionicons/icons";
 const  Pays: React.FC = () => {
   const url = 'http://localhost:8080/';
 
@@ -17,6 +18,8 @@ const  Pays: React.FC = () => {
 
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
+
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] =  useState<any>(null);
@@ -104,24 +107,33 @@ const  Pays: React.FC = () => {
   };
 
   //////////// DELETE
-  const handleDeleteClick = async (item : any) => {
+  const handleDeleteClick = (item: any) => {
+    setSelectedItem(item);
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
-      console.log(item);
       const response = await fetch(url + 'pays', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(item)
+        body: JSON.stringify(selectedItem)
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      // If you want to reload the page after success
+      setShowConfirmationModal(false);
+      // Refresh the data after deletion
       window.location.reload();
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmationModal(false);
   };
 
     	const handleInputIdChange = (event :any) => {
@@ -166,12 +178,16 @@ const  Pays: React.FC = () => {
             <IonModal isOpen={show} onDidDismiss={handleClose}>
               <form action="" method="" id="insert" onSubmit={handleSaveSubmit}>
                 	<div className="mb-3"> 
-	 	<label className="form-label">Nom</label> 
+	 	<label className="form-label">nom</label> 
 	 	<input className="form-control" type="text" name="nom" />
 	</div>
 	
-                <IonButton type="submit" >
-                  Save Changes
+
+                <IonButton color={"danger"} onClick={handleClose}>
+                  Close
+                </IonButton>
+                <IonButton color={"success"} type="submit" >
+                  Save 
                 </IonButton>
               </form>
             </IonModal>
@@ -185,7 +201,6 @@ const  Pays: React.FC = () => {
 			<th> Nom </th>
 
                 <th></th>
-                <th></th>
               </tr>
             </thead>
             <tbody id="table-body">
@@ -195,13 +210,11 @@ const  Pays: React.FC = () => {
 		<td>{item.nom}</td>
 
                   <td>
-                    <IonButton onClick={() => handleDeleteClick(item)}>
-                      Delete
+                    <IonButton onClick={() => handleDeleteClick(item)} color={"danger"}>
+                      <IonIcon aria-hidden="true" icon={trash} />
                     </IonButton>
-                  </td>
-                  <td>
-                    <IonButton onClick={() => handleSelectItem(item.id)}>
-                      Update
+                    <IonButton onClick={() => handleSelectItem(item.id)} color={"success"}>
+                      <IonIcon aria-hidden="true" icon={pencil} />
                     </IonButton>
                   </td>
                 </tr>
@@ -219,10 +232,34 @@ const  Pays: React.FC = () => {
 	 	<input className="form-control" type="text" name="nom" onChange={handleInputNomChange} value={selectedItem ? selectedItem.nom:''} />
 	</div>
 	
-              <IonButton type="submit">
+
+              <IonButton color={"danger"} onClick={handleClose2}>
+                  Close
+              </IonButton>
+              <IonButton color={"success"} type="submit">
                 Save Changes
               </IonButton>
             </form>
+          </IonModal>
+          <IonModal isOpen={showConfirmationModal} onDidDismiss={() => setShowConfirmationModal(false)}>
+            <IonAlert
+              isOpen={showConfirmationModal}
+              onDidDismiss={() => setShowConfirmationModal(false)}
+              header={'Confirm Deletion'}
+              message={'Are you sure you want to delete this item?'}
+              buttons={[
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  cssClass: 'secondary',
+                  handler: handleCancelDelete
+                },
+                {
+                  text: 'Delete',
+                  handler: handleConfirmDelete
+                }
+              ]}
+            />
           </IonModal>
         </div>
         {/* Pagination */ }
