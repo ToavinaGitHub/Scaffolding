@@ -78,6 +78,14 @@ public class DbConnection {
         setInit(true);
     }
 
+    public void init(DbProperties dbProperties){
+        
+        //this.setDefaultConnection(temp.getDefaultConnection());
+        //this.setInUseConnection(temp.getDefaultConnection());
+    
+    }
+
+
     public Connection connect(String connection)throws Exception{
         if(!isInit()) init();
         setConnection(createConnection(connection));

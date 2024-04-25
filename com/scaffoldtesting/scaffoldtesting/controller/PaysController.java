@@ -40,9 +40,4 @@ public class PaysController {
 	public ResponseEntity<Iterable<Pays>> findAll(){
 	 	return ResponseEntity.ok(repository.findAll());
 	}
-
-
-
-
-
 }

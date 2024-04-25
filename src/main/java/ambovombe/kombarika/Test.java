@@ -4,52 +4,61 @@ package ambovombe.kombarika;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 
+import ambovombe.kombarika.database.DbConnection;
 import ambovombe.kombarika.generator.CodeGenerator;
 import ambovombe.kombarika.generator.service.DbService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  *
  *  @author Mamisoa
  */
 public class Test {
 
-
     public static void main(String[] args) throws Exception {
         CodeGenerator codeGenerator = new CodeGenerator();
         String path = "./";
         String framework = "java:spring-boot";
-        String packageName = "com.scaffoldtesting.scaffoldtesting";
-        String entity = "entity";
-        String controller = "controller";
-        String repository = "repository";
-        String view = "view";
+        String packageName = "com.cinepax.mg";
+        String entity = "Model";
+        String controller = "Controller";
+        String repository = "Repository";
+        String view = "views/view";
         String viewType = "react-ionic";
         String url = "http://localhost:8080/";
         try{
-            // String[] tables = {"district","region"};
-            // DbConnection dbConnection = codeGenerator.getDbConnection();
-            // String str = dbConnection.getListConnection().get(dbConnection.getInUseConnection()).getDatabaseType().getForeignKeyQuery();
-            // str = str.replace("?", "commune");
-            // System.out.println(str);
-            // HashMap<String, String> foreignKeys = DbService.getForeignKeys(dbConnection, "commune");
-            // for (Map.Entry<String, String> set : foreignKeys.entrySet()) {
-            //     System.out.println(set.getKey() + " " + set.getValue());
-            // }
             String[] tables = DbService.getAllTablesArrays(codeGenerator.getDbConnection());
-            // for(String table: tables)
-            //     System.out.println(table);
+
             //codeGenerator.generateAll(path, packageName, entity, controller, repository, view, viewType, url, tables, framework);
 
-
+            //codeGenerator.generateAllControllerThymeleaf("./", tables, "com.cinepax.mg", "java:spring");
             
-            codeGenerator.generateLoginView(url, "login", "email", "password", viewType, "view", path);
+            //codeGenerator.generateAllThymeleafView(path, tables, view, "thymeleaf", "Tsakitsaky");
+
+            //codeGenerator.generateFileSequence("./", tables);
+
+        //   codeGenerator.generateLoginView(url, "login","utilisateur", "email", "password", viewType, view, path);
+       
+        //    DbConnection db = new DbConnection();
+        //    db.init(); 
+
+        //    List<String> cols = new ArrayList<>();
+        //    cols.add("email");
+        //    cols.add("password");
+
+        //    System.out.println(DbService.checkIfTableExist(db, "utilisateur"));
+
+
+            //HashMap<String,String> cols = DbService.getColumnNameAndType(db.getConnection(), "utilisateur");
             
             // codeGenerator.generateEntity(path, "car", packageName+".entity", framework);
         }catch(Exception e){
             e.printStackTrace();
         }finally{
             codeGenerator.getDbConnection().close();
-        }    
+        }
     }
 }

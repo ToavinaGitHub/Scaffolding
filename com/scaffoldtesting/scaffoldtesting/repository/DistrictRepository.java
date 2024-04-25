@@ -8,13 +8,4 @@ import org.springframework.data.jpa.repository.Query;
 
 
 public interface DistrictRepository extends CrudRepository<District, Integer> , JpaRepository<District, Integer> {
-
-
-
-
-
-
-
-
-
-}
+    }

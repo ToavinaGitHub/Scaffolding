@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import ambovombe.kombarika.utils.ConsoleColors;
+
 /**
  *
  * @author Mamisoa
@@ -75,7 +77,9 @@ public class FileUtility {
         String separator = File.separator;
         path = path + separator + fileName;
         File file = new File(path);
-        System.out.println(file.getPath() + " created");
+        System.out.println();
+        System.out.print(ConsoleColors.GREEN+"[SUCCESS]"+ConsoleColors.RESET);
+        System.out.print(file.getPath() + " created");
     }
     
     public static void writeFile(String path, String body) throws Exception{

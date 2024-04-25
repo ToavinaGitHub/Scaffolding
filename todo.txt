@@ -11,3 +11,24 @@
     --controller login
 
 
+    ----???
+
+        --Give table name to argument
+        --Check if table really contain columns
+        
+
+        -Controller de Utilisateur ou AuthController?
+
+
+
+        --------------------
+
+        -Repository: 
+            -findByEmailAndPassword
+            
+        -Controller : 
+            - /login (PostMapping)
+                -Check login 
+            
+
+

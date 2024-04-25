@@ -25,6 +25,10 @@ public class Misc {
         return getTemplateLocation() + File.separator + "view";
     }
 
+    public static String getSqlTemplateLocation(){
+        return getTemplateLocation() + File.separator + "Sql";
+    }
+
     public static String getConfigLocation(){
         return currentLocation("conf");
     }

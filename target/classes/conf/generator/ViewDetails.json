@@ -66,7 +66,7 @@
             "inputInsert":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<input className=\"form-control\" type=\"#type#\" name=\"#name#\" />\n</div>",
             "inputUpdate":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<input className=\"form-control\" type=\"#type#\" name=\"#name#\" onChange={handleInput#Name#Change} value={selectedItem ? selectedItem.#name#:''} />\n</div>",
             "select":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<select className=\"form-control\" name=\"#name#\" id=\"select-#name#\">\n#option#\n\t</select>\n</div>",
-            "selectUpdate":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<select className=\"form-control\" name=\"#name#\">\n\t#optionUpdate#\n</select>\n</div>",
+            "selectUpdate":"<div className=\"mb-3\"> \n \t<label className=\"form-label\">#label#</label> \n \t<select className=\"form-control\" name=\"#name#\" value={selectedItem ? selectedItem.#name#.id : ''} onChange={handleSelect#Name#Change} >\n\t#optionUpdate#\n</select>\n</div>",
             "option":"{#listFK#.map((elt :any) => (\n\t<option value={elt.#id#}>{elt.#attribute#}</option>\n))}\n",
             "optionUpdate":"{#listFK#.map((elt : any) => (\n\t<option value={elt.#id#}>{elt.#attribute#}</option>\n))}\n",
             "tableHeader":"\t<th> #label# </th>",
@@ -75,7 +75,7 @@
             "handleSelectChange":"const handleSelect#Name#Change = (event : any) => {\n\tsetSelectedItem({ ...selectedItem, #name#: event.target.value });\n};\n",
             "values":"const [#entity#, set#Entity#] = useState([]);\n",
             "tableValue":"<td>{item.#values#}</td>",
-            "fetch":"useEffect(() => {\n\tconst get#Entity# = async () => {\n\t\ttry {\n\t\t\tconst response = await fetch(url + '#entity##paging#'#pagingSize#);\n\t\t\t\tif (!response.ok) {\n\t\t\t\t\tthrow new Error('Network response was not ok');\n\t\t\t\t};\n\t\t\tconst data = await response.json();\n\t\t\tset#Entity#(data#haveContent#);\n\t\t} catch (error :any) {\n\t\t\tsetError(error);\n\t\t} finally {\n\t\t\tsetLoading(false);\n\t\t}\n\t};\n\tget#Entity#();\n}, [#cValue#]);\n",
+            "fetch":"useEffect(() => {\n\tconst get#Entity# = async () => {\n\t\ttry {\n\t\t\tconst response = await fetch(url + '#entity##paging#'#pagingSize#);\n\t\t\t\tif (!response.ok) {\n\t\t\t\t\tthrow new Error('Network response was not ok');\n\t\t\t\t};\n\t\t\tconst data = await response.json();\n\t\t\tset#Entity#(data#haveContent#);\n\t\t#count#} catch (error :any) {\n\t\t\tsetError(error);\n\t\t} finally {\n\t\t\tsetLoading(false);\n\t\t}\n\t};\n\tget#Entity#();\n}, [#cValue#]);\n",
             "handleSelectItem":"const handleSelectItem = (itemKey) => {\n\thandleShow2();\n\tconst itemDetails = district.find(item => item.id === itemKey);\n\tsetSelectedItem(itemDetails);\n};\n",
             "extension":"tsx",
             "getSelectValue":"for (let [key, value] of formData.entries()) {\n\t  if (form.elements[key].tagName === 'SELECT') {\n\t\tdata[key] = { #idFk#: value };\n\t} else {\n\t\t data[key] = value;\n\t}\n}",
@@ -94,6 +94,12 @@
                 "BigInt":"number",
                 "[B":"file"
             }
+
+        },
+        "thymeleaf":{
+            "template":"thymeleaf/thymeleaf.txt",
+            "header":"\t<th> #label# </th>",
+            "extension":"html"
         }
     }
 }

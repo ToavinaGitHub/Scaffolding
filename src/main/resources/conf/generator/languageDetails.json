@@ -177,8 +177,7 @@
                     "repository": "",
                     "isOneRepository":"false",
                     "imports" : {
-                        "controller":[
-    
+                        "controller":[    
                         ],
                         "entity":[
                             "com.dao.annotation.*",
@@ -232,6 +231,9 @@
                         "classSyntax": "public interface ?Repository extends CrudRepository<?, #type#>",
                         "fieldSyntax": ""
                     }
+                },
+                "spring" :{
+                    "template" : "controller.txt"
                 }
             }
         }
